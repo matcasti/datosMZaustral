@@ -11,6 +11,6 @@ El repositorio actual cuenta con los siguientes subdirectorios:
 -  [output](output): archivos 'end-user' como figuras, tablas, aplicaciones, etc.
 -  [script](script): código R utilizado para la generación de documentos de todo tipo.
 
-# Retroalimentación
+## Retroalimentación
 
 Si deseas realizar feedback del trabajo, sientete libre de abrir un [issue](https://github.com/matcasti/pasantiaANID/issues) en el repositorio.
