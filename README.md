@@ -13,4 +13,4 @@ El repositorio actual cuenta con los siguientes subdirectorios:
 
 # Retroalimentación
 
-Si deseas realizar feedback del trabajo, sientete libre de abrir un ['issue'](issues) en el repositorio.
+Si deseas realizar feedback del trabajo, sientete libre de abrir un ['issue'](https://github.com/matcasti/pasantiaANID/issues) en el repositorio.
