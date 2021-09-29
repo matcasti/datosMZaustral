@@ -1,6 +1,6 @@
-# Pasantía ANID
+# datosMZaustral
 
-En este repositorio se encuentran los datos vinculados con la creación de indicadores en `R`, así como otros documentos requeridos para su manipulación.
+En este repositorio se encuentran los datos vinculados con la creación de indicadores en `R` para la macrozona austral, así como otros documentos requeridos para su manipulación.
 
 ## Estructura del repositorio
 
