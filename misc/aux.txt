@@ -3,6 +3,6 @@
 - [x] Personas que su institución principal son de Magallanes y/o Aysén pero aparecen con otra región de ejecución
 - [x] Agregar dos observaciones (posdoctorados)
 - [x] Seguir revisando instituciones de la región con región_ejecución distinta
-- [ ] Normalizar instituciones
+- [x] Normalizar instituciones
 - [ ] Crear una columna 'ubicación de la institución'
 - [ ] Normalizar nombres
