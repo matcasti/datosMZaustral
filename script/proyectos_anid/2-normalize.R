@@ -154,8 +154,8 @@ mz_austral[institucion_principal %like% "AGROPECUARIAS", institucion_principal :
 
 # Creación de ubicacion institucion -----------------------------------------------------------
 
-#' @description Creamos nueva columna 'ubicacion_institucion' usando una lista de cotejo con la ubicacion de las instituciones basado en
-#' la región de ejecución y la institución principal
+#' @description Creamos nueva columna 'ubicacion_institucion' usando una lista de cotejo con la ubicacion 
+#' de las instituciones basado en la región de ejecución y la institución principal
 hoja_consulta <- data.table::fread(input = "data/proyectos_anid/ubicacion_institucion.csv")
 mz_austral <- merge(x = mz_austral, y = hoja_consulta, by = c("region_ejecucion", "institucion_principal"), all.x = TRUE)
 
