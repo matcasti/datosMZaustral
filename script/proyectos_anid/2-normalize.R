@@ -20,6 +20,10 @@ cl <- parallel::makeCluster(20)
 
 # Normalización -------------------------------------------------------------------------------
 
+#' @description Transformación de formato de la duración meses a numérico
+db_proyectos[, duracion_meses := as.numeric(gsub(",", ".", duracion_meses))] |> 
+  suppressWarnings()
+
 #' @description Todos los carácteres de nombre del proyecto, responsable e institución principal las
 #' transformamos a mayúsculas
 db_proyectos[j = `:=`(
@@ -33,7 +37,16 @@ db_proyectos[j = `:=`(
 db_proyectos[j = `:=`(
   nombre_responsable = gsub("Ã‘", "Ñ", nombre_responsable),
   nombre_concurso = gsub("â€“", "", nombre_concurso))
-  ][j = nombre_concurso := gsub("Ã‘", "Ñ", nombre_concurso)]
+  ][j = nombre_concurso := gsub("Ã‘", "Ñ", nombre_concurso)
+    ][j = nombre_responsable := gsub("Ã±", "Ñ", nombre_responsable)]
+
+#' @description Cambiamos los dobles espacios por un espacio de los nombres de los responsables
+db_proyectos[i = nombre_responsable %like% "  ", 
+             j = nombre_responsable := gsub("  ", " ", nombre_responsable, useBytes = TRUE)]
+
+#' @description Eliminamos los puntos de los nombres de los responsables
+db_proyectos[i = nombre_responsable %like% "\\.", 
+             j = nombre_responsable := gsub("\\.", "", nombre_responsable, useBytes = TRUE)]
 
 #' @description Modificar la región de ejecución y la macrozona de aquellas personas que su institución
 #' principal contenga la palabra 'MAGALLANES' y su región de ejecución no fuera la Región de Magallanes,
@@ -67,9 +80,16 @@ db_proyectos <- db_proyectos[n != 21894]
 #' @description Modificar código de proyecto 'repetido'
 db_proyectos <- db_proyectos[n == 12840, codigo_proyecto := "SIN INFORMACION2"]
 
+
+#' @description Mediante computación paralela generamos una comparación de cada uno de los elementos (i)
+#' con cada elemento (i') en busca de coincidencias aproximada (fuzzy matching)
 search. <- unique(db_proyectos$nombre_responsable)
 m_names <- parallel::parSapply(cl, search., agrep, search., value = TRUE, max.distance = 0) |> # 1 a 3 minutos usando computación paralela
   Filter(f = function(i) length(i) > 1) 
+
+for (i in m_names) {
+  db_proyectos[nombre_responsable %in% i, nombre_responsable := i[which.max(nchar(i))]]
+}
 
 #' @description Normalizar CENTRO DE ESTUDIOS DEL CUATERNARIO DE FUEGO-PATAGONIA Y ANTARTICA-CEQUA
 db_proyectos[i = institucion_principal %like% "CUATERNARIO", 
@@ -114,6 +134,11 @@ db_proyectos[i = institucion_principal %like% "SANTA TERESA" &
                institucion_principal %like% "ANDES",
              j = institucion_principal := "COLEGIO SANTA TERESA DE LOS ANDES"]
 
+
+# Calculo de fecha de finalización ------------------------------------------------------------
+
+db_proyectos[, año_finalizacion := round(año_fallo + (duracion_meses/12))]
+
 # Subset de macrozona AUSTRAL -----------------------------------------------------------------
 
 #' @description Generamos un subset sólo con los proyectos adjudicados con región de ejecición Aysén 
@@ -121,58 +146,18 @@ db_proyectos[i = institucion_principal %like% "SANTA TERESA" &
 mz_austral <- db_proyectos[i = region_ejecucion %in% c("11. AYSEN", "12. MAGALLANES Y ANTARTICA CHILENA") | 
                              institucion_principal %like% "MAGALLANES"]
 
-## Normalizamos nombres de responsables ----
+#' @description Transformamos Ñ por N en nombre responsable
+mz_austral[nombre_responsable %like% "Ñ", nombre_responsable := gsub("Ñ", "N", nombre_responsable, useBytes = TRUE)]
 
-# mz_austral[i = nombre_responsable %like% "ALEJANDRO" & 
-#              nombre_responsable %like% "ROLDAN" & 
-#              nombre_responsable %like% "MOLINA", 
-#            j = nombre_responsable := "ALEJANDRO RENE ROLDAN MOLINA"]
-# 
-# mz_austral[i = nombre_responsable %like% "ALEX" & 
-#              nombre_responsable %like% "FAJARDO", 
-#            j = nombre_responsable := "ALEX FAJARDO YANEZ"]
-# 
-# mz_austral[i = nombre_responsable %like% "ANDRES" & 
-#              nombre_responsable %like% "MANSILLA", 
-#            j = nombre_responsable := "ANDRES OMAR MANSILLA MUÑOZ"]
-# 
-# mz_austral[i = nombre_responsable %like% "ARTURO" & 
-#              nombre_responsable %like% "GODOY" & 
-#              nombre_responsable %like% "PURATIC", 
-#            j = nombre_responsable := "ARTURO ANDRES GODOY PURATIC"]
-# 
-# mz_austral[i = nombre_responsable %like% "ARTURO" & 
-#              nombre_responsable %like% "KUNSTMANN", 
-#            j = nombre_responsable := "ARTURO KUNSTMANN FERRERIA"]
-# 
-# mz_austral[i = nombre_responsable %like% "BRIAN" & 
-#              nombre_responsable %like% "REID", 
-#            j = nombre_responsable := "BRIAN LEGARE REID BURNS"]
-# 
-# mz_austral[i = nombre_responsable %like% "CARLOS" & 
-#              nombre_responsable %like% "CARDENAS", 
-#            j = nombre_responsable := "CARLOS CARDENAS MANSILLA"]
-# 
-# mz_austral[, unique(nombre_responsable) |> sort()]
-# 
-# mz_austral[i = nombre_responsable %like% "CLAUDIA" & 
-#              nombre_responsable %like% "ARACENA", 
-#            j = nombre_responsable := "CLAUDIA MILENI ARACENA PEREZ"]
-# 
-# mz_austral[i = nombre_responsable %like% "DIEGO" & 
-#              nombre_responsable %like% "SOTO", 
-#            j = nombre_responsable := "DIEGO ENRIQUE SOTO SANCHEZ"]
+#' @description Normalizamos el INSTITUTO DE INVESTIGACIONES AGROPECUARIAS por INIA MAGALLANES
+mz_austral[institucion_principal %like% "AGROPECUARIAS", institucion_principal := "INIA MAGALLANES"]
 
-# lapply(mz_austral$nombre_responsable, function(i) {
-#   j <- tstrsplit(i, " ") |> 
-#     unlist() |> 
-#     combn(2, simplify = F)
-#   jj <- lapply(j, function(j.) {
-#     temp <- mz_austral[nombre_responsable %like% j.[1] & nombre_responsable %like% j.[2], nombre_responsable]
-#     if (length(unique(temp)) > 1) temp else NULL
-#   }) |> unlist()
-# }) 
+# Creación de ubicacion institucion -----------------------------------------------------------
 
+#' @description Creamos nueva columna 'ubicacion_institucion' usando una lista de cotejo con la ubicacion de las instituciones basado en
+#' la región de ejecución y la institución principal
+hoja_consulta <- data.table::fread(input = "data/proyectos_anid/ubicacion_institucion.csv")
+mz_austral <- merge(x = mz_austral, y = hoja_consulta, by = c("region_ejecucion", "institucion_principal"), all.x = TRUE)
 
 # Guardamos los datos -------------------------------------------------------------------------
 
