@@ -11,12 +11,19 @@ library(readxl)
 library(data.table)
 library(tm)
 
+# Funciones auxiliares ------------------------------------------------------------------------
+.s <- function(x, ...) {
+  stopifnot(inherits(x, "data.table"))
+  temp <- substitute(x[...])
+  eval(temp)
+}
+
 # Importación ---------------------------------------------------------------------------------
 
 ## Importamos base de datos
 lab_instrumentosANID <- readxl::read_excel("data/lab_instrumentos/raw/Lista de problemas LAB 1.xlsx", sheet = "Lista") |> 
   data.table::as.data.table() |> 
-  dtPipe::dtbl(j = .SD, .SDcols = 1:5) |> 
+  .s(j = .SD, .SDcols = 1:5) |> 
   `names<-`(c("lab", "instrumento", "problema", "k_problema_manual", "norm_problema"))
 
 ## Stop words
@@ -31,11 +38,11 @@ for (i in stopWords) {
 }
 
 ## Stopwords con criterios específicos
-lab_instrumentosANID[, norm_problema := gsub(pattern = "el ", replacement = "", x = norm_problema, fixed = TRUE)]
-lab_instrumentosANID[, norm_problema := gsub(pattern = "la ", replacement = "", x = norm_problema, fixed = TRUE)]
-lab_instrumentosANID[, norm_problema := gsub(pattern = "las ", replacement = "", x = norm_problema, fixed = TRUE)]
+lab_instrumentosANID[, norm_problema := gsub(pattern = "el ", replacement = "", x = norm_problema, fixed = TRUE)
+                     ][, norm_problema := gsub(pattern = "la ", replacement = "", x = norm_problema, fixed = TRUE)
+                       ][, norm_problema := gsub(pattern = "las ", replacement = "", x = norm_problema, fixed = TRUE)]
 
-
+## Creación de un corpus para posterior análisis
 m <- Corpus(VectorSource(lab_instrumentosANID$norm_problema)) |> 
   TermDocumentMatrix(control = list(minWordLength = c(1, Inf))) |> 
   removeSparseTerms(sparse = .98) |> 
