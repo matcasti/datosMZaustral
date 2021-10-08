@@ -20,7 +20,7 @@ lab_instrumentosANID <- readxl::read_excel("data/lab_instrumentos/raw/Lista de p
   `names<-`(c("lab", "instrumento", "problema", "k_problema_manual", "norm_problema"))
 
 ## Stop words
-# stopWords <- readLines(con = "https://raw.githubusercontent.com/Alir3z4/stop-words/master/spanish.txt")
+stopWords <- readLines(con = "https://raw.githubusercontent.com/Alir3z4/stop-words/master/spanish.txt")
 
 ## A minuscula
 lab_instrumentosANID <- lab_instrumentosANID[, lapply(.SD, tolower)]
