@@ -12,6 +12,9 @@
 library(data.table)
 library(parallel)
 
+## Corremos el primer script
+source(file = "script/proyectos_anid/1-import.R", verbose = TRUE)
+
 ## Importamos los datos
 db_proyectos <- readRDS(file = "data/proyectos_anid/raw/db_proyectos.RDS")
 
