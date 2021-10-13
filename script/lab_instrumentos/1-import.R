@@ -10,6 +10,7 @@
 library(readxl)
 library(data.table)
 library(tm)
+library(igraph)
 
 # Funciones auxiliares ------------------------------------------------------------------------
 .s <- function(x, ...) {
@@ -45,16 +46,12 @@ lab_instrumentosANID[, norm_problema := gsub(pattern = "el ", replacement = "", 
 ## Creación de un corpus para posterior análisis
 m <- Corpus(VectorSource(lab_instrumentosANID$norm_problema)) |> 
   TermDocumentMatrix(control = list(minWordLength = c(1, Inf))) |> 
-  # removeSparseTerms(sparse = .98) |> 
   as.matrix()
 
 m2 <- m[rowSums(m) > 1, ]
 
 m2[m2 > 1] <- 1
 termM <- m2 %*% t(m2)
-
-
-library(igraph)
 
 g <- graph.adjacency(termM, weighted = T, mode = 'undirected')
 g
@@ -74,7 +71,7 @@ hist(V(g)$degree,
 set.seed(222)
 plot(g, vertex.size = 4)
 plot(g,
-     vertex.color='green',
+     vertex.color = 'green',
      vertex.size = 4,
      vertex.label.dist = 1.5,
      vertex.label = NA)
@@ -92,23 +89,22 @@ plot(greed, as.undirected(g), vertex.size = 4)
 
 # Hub and authorities
 hs <- hub_score(g, weights = NA)$vector
-as <- authority_score(g, weights=NA)$vector
-par(mfrow=c(1,2))
-plot(g, vertex.size=hs*10, main='Hubs',
-     vertex.color=rainbow(50))
-plot(g, vertex.size=as*9, main='Authorities',
-     vertex.color=rainbow(50))
-par(mfrow=c(1,1))
+as <- authority_score(g, weights = NA)$vector
+par(mfrow = c(1,2))
+plot(g, vertex.size = hs * 10, main = 'Hubs',
+     vertex.color = rainbow(50))
+plot(g, vertex.size = as * 9, main = 'Authorities',
+     vertex.color = rainbow(50))
+par(mfrow = c(1,1))
 
 # Highlighting degrees
-V(g)$label.cex <- 2.2*V(g)$degree / max(V(g)$degree) + 0.3
+V(g)$label.cex <- 2.2 * V(g)$degree / max(V(g)$degree) + 0.3
 V(g)$label.color <- rgb(0, 0, .2, .8)
 V(g)$frame.color <- NA
-egam <- (log(E(g)$weight)+.4) / max(log(E(g)$weight) + .4)
+egam <- (log(E(g)$weight) + .4) / max(log(E(g)$weight) + .4)
 E(g)$color <- rgb(.5, .5, 0, egam)
 E(g)$width <- egam
-plot(g,
-     vertex.size = V(g)$degree*.5)
+plot(g, vertex.size = V(g)$degree * .5)
 
 # Network of tweets
 tweetM <- t(m2) %*% m2
@@ -128,7 +124,7 @@ V(g)$label.cex <- 1
 V(g)$label.color <- rgb(.4, 0, 0, .7)
 V(g)$size <- 2
 V(g)$frame.color <- NA
-plot(g, vertex.size=3)
+plot(g, vertex.size = 3)
 
 # Delete vertices
 egam <- (log(E(g)$weight) + .2) / max(log(E(g)$weight) + .2)
@@ -178,7 +174,7 @@ hc <- m |>
 set.seed(12345)
 m |> 
   t() |> 
-  kmeans(centers = 9, nstart = 1, iter.max = 1000) |> 
+  kmeans(centers = 8, nstart = 1, iter.max = 1000) |> 
   factoextra::fviz_cluster(data = t(m), 
                            geom = "point",
                            ggtheme = ggplot2::theme_bw())
