@@ -1,10 +1,10 @@
 
 # Datos generales -----------------------------------------------------------------------------
 
-## script: 1-import.R
-## función: importar datos de laboratorio de instrumentos
+## script: 2-clustering.R
+## función: generar modelos de clusterización
 ## autor: Matías Castillo
-## fecha: viernes 8 octubre 2021
+## fecha: miércoles 13 octubre 2021
 
 # Cargar paquetes -----------------------------------------------------------------------------
 
@@ -22,16 +22,11 @@
     eval(temp)
   }
   
-  ## Importamos base de datos
-  lab_instrumentosANID <- readRDS(file = "data/lab_instrumentos/clean/data.RDS")
-  
-  lab_instrumentosANID[, norm_problema := gsub("macrozona-austral", replacement = "", x = norm_problema)]
-  
 # Preparación del corpus ----------------------------------------------------------------------
 
   ## Creación de un corpus para posterior análisis
-  m <- Corpus(x = VectorSource(x = unique(lab_instrumentosANID$norm_problema) ) ) |> 
-    TermDocumentMatrix(control = list(minWordLength = c(1, Inf) ) ) |> 
+  m <- tm::Corpus(x = tm::VectorSource(x = unique(lab_instrumentosANID$norm_problema) ) ) |> 
+    tm::TermDocumentMatrix(control = list(minWordLength = c(1, Inf) ) ) |> 
     as.matrix()
   
 
@@ -43,13 +38,13 @@
       m2 <- m[rowSums(m) > 1, ]
       m2[m2 > 1] <- 1
       termM <- m2 %*% t(m2)
-      g <- graph.adjacency(termM, weighted = T, mode = 'undirected')
-      g <- simplify(g)
-      V(g)$label <- V(g)$name
-      V(g)$degree <- degree(g)
+      g <- igraph::graph.adjacency(termM, weighted = T, mode = 'undirected')
+      g <- igraph::simplify(g)
+      igraph::V(g)$label <- igraph::V(g)$name
+      igraph::V(g)$degree <- igraph::degree(g)
       
       # Histogram of node degree
-      hist(V(g)$degree,
+      hist(igraph::V(g)$degree,
            breaks = 20,
            col = 'green',
            main = 'Histogram of Node Degree',
@@ -61,9 +56,9 @@
       plot(g, vertex.size = 4)
       
       # Detección de comunidades ----
-      comm <- cluster_edge_betweenness(g)
+      comm <- igraph::cluster_edge_betweenness(g)
       plot(comm, g, vertex.size = 4)
-      net_k1 <- membership(comm)
+      net_k1 <- igraph::membership(comm)
       net_k1_n <- names(net_k1)
       
       # ## Asignamos grupos del clustering ----
@@ -74,9 +69,9 @@
       #   lab_instrumentosANID[norm_problema %like% i, norm_problema_net_k1 := as.numeric(k)]
       # }
       
-      prop <- cluster_label_prop(g)
+      prop <- igraph::cluster_label_prop(g)
       plot(prop, g, vertex.size = 4)
-      net_k2 <- membership(prop)
+      net_k2 <- igraph::membership(prop)
       net_k2_n <- names(net_k2)
       
       # ## Asignamos grupos del clustering ----
@@ -88,9 +83,9 @@
       # }
       
       set.seed(222)
-      greed <- cluster_fast_greedy(as.undirected(g))
-      plot(greed, as.undirected(g), vertex.size = 4)
-      net_k3 <- membership(greed)
+      greed <- igraph::cluster_fast_greedy(igraph::as.undirected(g))
+      plot(greed, igraph::as.undirected(g), vertex.size = 4)
+      net_k3 <- igraph::membership(greed)
       net_k3_n <- names(net_k3)
       
       # ## Asignamos grupos del clustering ----
@@ -102,8 +97,8 @@
       # }
       
       # Hub and authorities
-      hs <- hub_score(g, weights = NA)$vector
-      as <- authority_score(g, weights = NA)$vector
+      hs <- igraph::hub_score(g, weights = NA)$vector
+      as <- igraph::authority_score(g, weights = NA)$vector
       par(mfrow = c(1,2))
       plot(g, vertex.size = hs * 10, main = 'Hubs',
            vertex.color = rainbow(50))
@@ -111,20 +106,20 @@
            vertex.color = rainbow(50))
       par(mfrow = c(1,1))
           # Highlighting degrees
-          V(g)$label.cex <- 2.2 * V(g)$degree / max(V(g)$degree) + 0.3
-          V(g)$label.color <- rgb(0, 0, .2, .8)
-          V(g)$frame.color <- NA
-          egam <- (log(E(g)$weight) + .4) / max(log(E(g)$weight) + .4)
-          E(g)$color <- rgb(.5, .5, 0, egam)
-          E(g)$width <- egam
-          plot(g, vertex.size = V(g)$degree * .5)
+      igraph::V(g)$label.cex <- 2.2 * igraph::V(g)$degree / max(igraph::V(g)$degree) + 0.3
+          igraph::V(g)$label.color <- rgb(0, 0, .2, .8)
+          igraph::V(g)$frame.color <- NA
+          egam <- (log(igraph::E(g)$weight) + .4) / max(log(igraph::E(g)$weight) + .4)
+          igraph::E(g)$color <- rgb(.5, .5, 0, egam)
+          igraph::E(g)$width <- egam
+          plot(g, vertex.size = igraph::V(g)$degree * .5)
           
           # Network of tweets
           m3 <- t(m2) %*% m2
-          g <- graph.adjacency(m3, weighted = T, mode = 'undirected')
-          V(g)$degree <- degree(g)
-          g <- simplify(g)
-          hist(V(g)$degree,
+          g <- igraph::graph.adjacency(m3, weighted = T, mode = 'undirected')
+          igraph::V(g)$degree <- igraph::degree(g)
+          g <- igraph::simplify(g)
+          hist(igraph::V(g)$degree,
                breaks = 100,
                col = 'green',
                main = 'Histogram of Degree',
@@ -132,27 +127,27 @@
                xlab = 'Degree')
           
           # Set labels of vertices to tweet IDs
-          V(g)$label <- V(g)$name
-          V(g)$label.cex <- 1
-          V(g)$label.color <- rgb(.4, 0, 0, .7)
-          V(g)$size <- 2
-          V(g)$frame.color <- NA
+          igraph::V(g)$label <- igraph::V(g)$name
+          igraph::V(g)$label.cex <- 1
+          igraph::V(g)$label.color <- rgb(.4, 0, 0, .7)
+          igraph::V(g)$size <- 2
+          igraph::V(g)$frame.color <- NA
           plot(g, vertex.size = 3)
           
           # Delete vertices
-          egam <- (log(E(g)$weight) + .2) / max(log(E(g)$weight) + .2)
-          E(g)$color <- rgb(.5, .5, 0, egam)
-          E(g)$width <- egam
-          g2 <- delete.vertices(g, V(g)[degree(g) < 2])
+          egam <- (log(igraph::E(g)$weight) + .2) / max(log(igraph::E(g)$weight) + .2)
+          igraph::E(g)$color <- rgb(.5, .5, 0, egam)
+          igraph::E(g)$width <- egam
+          g2 <- igraph::delete.vertices(g, igraph::V(g)[igraph::degree(g) < 2])
           plot(g2,
                vertex.label.cex = .9,
                vertex.label.color = 'black')
           
           # Delete edges
-          E(g)$color <- rgb(.5, .5, 0, egam)
-          E(g)$width <- egam
-          g3 <- delete.edges(g, E(g)$weight <- 1)
-          g3 <- delete.vertices(g3, V(g3)[degree(g3) < 20])
+          igraph::E(g)$color <- rgb(.5, .5, 0, egam)
+          igraph::E(g)$width <- egam
+          g3 <- igraph::delete.edges(g, igraph::E(g)$weight <- 1)
+          g3 <- igraph::delete.vertices(g3, igraph::V(g3)[igraph::degree(g3) < 20])
           plot(g3)
           })
   }
@@ -167,7 +162,7 @@
     
     ## Graficamos mediante dendrograma --------------------------------------------------------
       plot(hc)
-      rect.hclust(hc, k = 10)
+      rect.hclust(hc, k = 14)
       hc_groups <- cutree(hc, k = 14)
       hc_names <- names(hc_groups)
     
@@ -178,6 +173,8 @@
         # Asignar el grupo a una nueva columna
         lab_instrumentosANID[norm_problema %like% i, norm_problema_hclust := k]
       }
+      
+      rm(hc_groups, hc_names)
     
   # 2. Clusterización no jerárquica mediante K-means ---------------------------------------------
   
@@ -191,10 +188,10 @@
     
     #Graficar
     if (require("ggplot2", quietly = TRUE)) {
-      ggplot() + geom_point(aes(x = 1:20, y = wcss), color = 'blue') + 
-        geom_line(aes(x = 1:20, y = wcss), color = 'blue') + 
-        xlab('Cantidad de Centroides k') + 
-        ylab('WCSS')
+      ggplot2::ggplot() + ggplot2::geom_point(aes(x = 1:20, y = wcss), color = 'blue') + 
+        ggplot2::geom_line(aes(x = 1:20, y = wcss), color = 'blue') + 
+        ggplot2::xlab('Cantidad de Centroides k') + 
+        ggplot2::ylab('WCSS')
     }
   })
   
@@ -220,22 +217,38 @@
     by = "norm_problema"
   )
 
-
+  rm(lookup_km)
+  
   # 3. Density based clustering ---------------------------------------------------------------
 
   # Buscar un eps óptimo
-  kNNdistplot(t(m), k = 4); abline(h = 1.74)
+  dbscan::kNNdistplot(t(m), k = 4); abline(h = 1.74)
   
   set.seed(12345)
   f <- fpc::dbscan(t(m), eps = 2, MinPts = 1); f
   d <- dbscan::dbscan(t(m), 2, minPts = 1); d
   
   factoextra::fviz_cluster(d, t(m), geom = "point")
+  
+  ## Generamos grupos ----
+  lookup_km <- data.table(norm_problema_dbscan = d$cluster, 
+                          norm_problema = unique(lab_instrumentosANID$norm_problema))
+  
+  ## Asignamos grupos
+  lab_instrumentosANID <- merge(
+    x = lab_instrumentosANID,
+    y = lookup_km,
+    all.x = TRUE,
+    by = "norm_problema"
+  )
+  
+  rm(f, lookup_km)
 
   # 4. K-mediods ------------------------------------------------------------------------------
   
   factoextra::fviz_nbclust(t(m), cluster::pam, method = "wss", k.max = 20)
   
+  set.seed(12345)
   gap_stat <- cluster::clusGap(x = t(m), FUNcluster = cluster::pam, K.max = 20, B = 100)
   
   factoextra::fviz_gap_stat(gap_stat)
@@ -243,4 +256,18 @@
   kmed <- cluster::pam(x = t(m), k = 4, metric = "euclidean", stand = FALSE)
 
   factoextra::fviz_cluster(kmed, data = t(m))
+  
+  ## Generamos grupos ----
+  lookup_km <- data.table(norm_problema_kmed = kmed$cluster, 
+                          norm_problema = unique(lab_instrumentosANID$norm_problema))
+  
+  ## Asignamos grupos
+  lab_instrumentosANID <- merge(
+    x = lab_instrumentosANID,
+    y = lookup_km,
+    all.x = TRUE,
+    by = "norm_problema"
+  )
+  
+  rm(gap_stat, lookup_km)
   

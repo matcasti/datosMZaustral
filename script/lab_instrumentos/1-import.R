@@ -22,8 +22,8 @@ library(data.table)
 ## Importamos base de datos
 lab_instrumentosANID <- readxl::read_excel("data/lab_instrumentos/raw/Lista de problemas LAB 1.xlsx", sheet = "Lista") |> 
   data.table::as.data.table() |> 
-  .s(j = .SD, .SDcols = 1:5) |> 
-  `names<-`(c("lab", "instrumento", "problema", "k_problema_manual", "norm_problema"))
+  .s(j = .SD, .SDcols = c(1:5, 11)) |> 
+  `names<-`(c("lab", "instrumento", "problema", "k_problema_manual", "norm_problema", "region"))
 
 ## Stop words
 stopWords <- readLines(con = "https://raw.githubusercontent.com/Alir3z4/stop-words/master/spanish.txt")
@@ -40,6 +40,8 @@ for (i in stopWords) {
 lab_instrumentosANID[, norm_problema := gsub(pattern = "el ", replacement = "", x = norm_problema, fixed = TRUE)
                      ][, norm_problema := gsub(pattern = "la ", replacement = "", x = norm_problema, fixed = TRUE)
                        ][, norm_problema := gsub(pattern = "las ", replacement = "", x = norm_problema, fixed = TRUE)]
+
+rm(stopWords, i)
 
 # Guardamos los datos -------------------------------------------------------------------------
 
