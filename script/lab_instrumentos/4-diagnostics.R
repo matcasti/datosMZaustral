@@ -1,7 +1,7 @@
 
 # Datos generales -----------------------------------------------------------------------------
 
-## script: 3-diagnostics.R
+## script: 4-diagnostics.R
 ## función: evaluar el ajuste de los modelos a los clusteres manuales
 ## autor: Matías Castillo
 ## fecha: viernes 15 octubre 2021
@@ -12,7 +12,7 @@
 
 # Cargamos modelos generados anteriormente ----------------------------------------------------
 
-  source("script/lab_instrumentos/2-clustering.R", echo = F) # Aquí también se cargan los datos trabajados
+  source("script/lab_instrumentos/2-ABtesting.R", echo = F) # Aquí también se cargan los datos trabajados
                                                              # en el script anterior
   
   ## Con esto convertimos cada problema único a un número                                                           
@@ -71,16 +71,17 @@
 
   knitr::kable(
     x = cbind(
-      `colnames<-`(hc, c("Problemas normalizados", 1:10)), 
+      `colnames<-`(hc, c("Problemas normalizados", 1:3)), 
       `colnames<-`(km[,-1], paste(1:4)), 
-      `colnames<-`(d[,-1], paste(1:13)), 
+      `colnames<-`(d[,-1], paste(1:10)), 
       `colnames<-`(kmed[,-1], paste(1:4))
         ),
   ) |> 
     kableExtra::add_header_above(
-      header = c(" " = 1, "Ward-D" = 10, "K-means" = 4, "Density-based" = 13, "K-medians" = 4)
+      header = c(" " = 1, "Ward-D" = 3, "K-means" = 4, "Density-based" = 10, "K-medians" = 4)
     ) |> 
-    kableExtra::column_spec(column = 1:32, width = "3cm") |> 
-    kableExtra::kable_styling(full_width = F, )
+    kableExtra::column_spec(column = 1:22, width = "3cm") |> 
+    kableExtra::column_spec(column = c(2,5,9,19), border_left = T) |> 
+    kableExtra::kable_styling(full_width = F)
 
   

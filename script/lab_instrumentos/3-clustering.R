@@ -1,7 +1,7 @@
 
 # Datos generales -----------------------------------------------------------------------------
 
-## script: 2-clustering.R
+## script: 3-clustering.R
 ## función: generar modelos de clusterización
 ## autor: Matías Castillo
 ## fecha: miércoles 13 octubre 2021
@@ -162,8 +162,8 @@
     
     ## Graficamos mediante dendrograma --------------------------------------------------------
       plot(hc)
-      rect.hclust(hc, k = 14)
-      hc_groups <- cutree(hc, k = 14)
+      rect.hclust(hc, k = 5)
+      hc_groups <- cutree(hc, k = 5)
       hc_names <- names(hc_groups)
     
     ## Asignamos grupos del clustering --------------------------------------------------------
@@ -269,5 +269,5 @@
     by = "norm_problema"
   )
   
-  rm(gap_stat, lookup_km)
+  rm(gap_stat, lookup_km, m)
   
