@@ -11,10 +11,13 @@ library(data.table)
 
 data <- readRDS(file = "data/lab_instrumentos/clean/data.RDS")
 
+## Importamos también stopwords
+stopWords <- readLines(con = "https://raw.githubusercontent.com/Alir3z4/stop-words/master/spanish.txt")
+
 # Producto ------------------------------------------------------------------------------------
 
 ## Generamos los términos frecuentes
-terminos <- qdap::freq_terms(data$norm_problema, top = 40)
+terminos <- qdap::freq_terms(data$norm_problema, top = 40, stopwords = stopWords)
 
 ## Generamos nube de palabras
 pdf(file = "output/lab_instrumentos/productos/nube_palabras.pdf", width = 8, height = 8)
