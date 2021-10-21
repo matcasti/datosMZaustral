@@ -12,9 +12,6 @@
 
 # Cargamos modelos generados anteriormente ----------------------------------------------------
 
-  source("script/lab_instrumentos/2-ABtesting.R", echo = F) # Aquí también se cargan los datos trabajados
-                                                             # en el script anterior
-  
   ## Con esto convertimos cada problema único a un número                                                           
   lab_instrumentosANID[, norm_problema_num := as.numeric(as.factor(norm_problema))]
   
@@ -81,7 +78,33 @@
       header = c(" " = 1, "Ward-D" = 3, "K-means" = 4, "Density-based" = 10, "K-medians" = 4)
     ) |> 
     kableExtra::column_spec(column = 1:22, width = "3cm") |> 
-    kableExtra::column_spec(column = c(2,5,9,19), border_left = T) |> 
-    kableExtra::kable_styling(full_width = F)
+    kableExtra::kable_styling(full_width = F, )
 
+
+# Problemas normalizados por instrumento ------------------------------------------------------
+
+  data_temp <- readRDS("data/lab_instrumentos/raw/tempData.RDS")
+  
+  temp2 <- merge(
+    x = lab_instrumentosANID[region == 1,], 
+    y = data_temp[region == 1, .(norm_problema2 = norm_problema, problema)] |> unique(), 
+    all.x = TRUE,
+    by = "problema"
+  )
+  
+  tabla_1 <- temp2[j = .(norm_problema2, norm_problema_num), by = instrumento] |> 
+    unique() |> 
+    dcast(norm_problema2 + norm_problema_num ~ instrumento, value.var = "norm_problema_num")
+  
+  total <- tabla_1[, 3:8][, lapply(.SD, \(i) length(i[!is.na(i)])) |> 
+                            append(x = list(norm_problema2 = "Total", norm_problema_num = NA))]
+  
+  rbind(tabla_1, total) |> View()
+  
+  lab_instrumentosANID$norm_problema |> unique() |> length()
+  
+  lab_instrumentosANID[region == 1, .(norm_problema)]
+  data_temp[region == 1, .(norm_problema)]
+  
+  data_temp[region == 1]$norm_problema |> unique() |> length()
   

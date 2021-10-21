@@ -29,7 +29,10 @@ lab_instrumentosANID <- readxl::read_excel("data/lab_instrumentos/raw/Lista de p
 stopWords <- readLines(con = "https://raw.githubusercontent.com/Alir3z4/stop-words/master/spanish.txt")
 
 ## A minuscula
-lab_instrumentosANID <- lab_instrumentosANID[, lapply(.SD, tolower)]
+lab_instrumentosANID <- data_temp <- lab_instrumentosANID[, lapply(.SD, tolower)]
+
+saveRDS(object = data_temp, file = "data/lab_instrumentos/raw/tempData.RDS")
+rm(data_temp)
 
 ## Eliminamos stopWords
 for (i in stopWords) {
@@ -46,3 +49,5 @@ rm(stopWords, i)
 # Guardamos los datos -------------------------------------------------------------------------
 
 saveRDS(object = lab_instrumentosANID, file = "data/lab_instrumentos/clean/data.RDS")
+
+ 

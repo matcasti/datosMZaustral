@@ -21,6 +21,12 @@
     temp <- substitute(x[...])
     eval(temp)
   }
+
+# Importar datos ------------------------------------------------------------------------------
+
+  lab_instrumentosANID <- lab_instrumentosANID[j = norm_problema := gsub(pattern = "macrozona-austral", 
+                                                 replacement = "", 
+                                                 x = norm_problema)][region == "1"]
   
 # Preparación del corpus ----------------------------------------------------------------------
 
