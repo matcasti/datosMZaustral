@@ -1,0 +1,24 @@
+## función: Generar nube de palabras
+## fecha: 21-oct
+
+# Preparar el espacio de trabajo --------------------------------------------------------------
+
+library(qdap)
+library(wordcloud)
+library(data.table)
+
+# Importar los datos --------------------------------------------------------------------------
+
+data <- readRDS(file = "data/lab_instrumentos/clean/data.RDS")
+
+# Producto ------------------------------------------------------------------------------------
+
+## Generamos los términos frecuentes
+terminos <- qdap::freq_terms(data$norm_problema, top = 40)
+
+## Generamos nube de palabras
+set.seed(12345)
+wordcloud(words = terminos$WORD, freq = terminos$FREQ, 
+          rot.per = 0, 
+          scale = c(5,1), 
+          random.order = F)

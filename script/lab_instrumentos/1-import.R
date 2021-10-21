@@ -22,8 +22,11 @@ library(data.table)
 ## Importamos base de datos
 lab_instrumentosANID <- readxl::read_excel("data/lab_instrumentos/raw/Lista de problemas LAB 1.xlsx", sheet = "Lista") |> 
   data.table::as.data.table() |> 
-  .s(j = .SD, .SDcols = c(1:5, 11)) |> 
-  `names<-`(c("lab", "instrumento", "problema", "k_problema_manual", "norm_problema", "region"))
+  `names<-`(c("laboratorio", "grupo", "problema", "cluster_problema_manual",                                                                      
+              "norm_problema", "cluster_causa_manual", "debido_a", 
+              "normalizacion_causa", "conector_3", "consecuencias", "region", 
+              "indicadores_relevantes_como_evidencia")) |> 
+  .s(region == "1")
 
 ## Stop words
 stopWords <- readLines(con = "https://raw.githubusercontent.com/Alir3z4/stop-words/master/spanish.txt")

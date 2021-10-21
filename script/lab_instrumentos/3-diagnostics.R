@@ -99,12 +99,6 @@
   total <- tabla_1[, 3:8][, lapply(.SD, \(i) length(i[!is.na(i)])) |> 
                             append(x = list(norm_problema2 = "Total", norm_problema_num = NA))]
   
-  rbind(tabla_1, total) |> View()
-  
-  lab_instrumentosANID$norm_problema |> unique() |> length()
-  
-  lab_instrumentosANID[region == 1, .(norm_problema)]
-  data_temp[region == 1, .(norm_problema)]
-  
-  data_temp[region == 1]$norm_problema |> unique() |> length()
-  
+  tabla_1 <- rbind(tabla_1, total)
+
+  kableExtra::his

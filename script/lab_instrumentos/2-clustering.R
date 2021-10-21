@@ -26,7 +26,7 @@
 
   lab_instrumentosANID <- lab_instrumentosANID[j = norm_problema := gsub(pattern = "macrozona-austral", 
                                                  replacement = "", 
-                                                 x = norm_problema)][region == "1"]
+                                                 x = norm_problema)]
   
 # Preparación del corpus ----------------------------------------------------------------------
 
@@ -34,6 +34,8 @@
   m <- tm::Corpus(x = tm::VectorSource(x = unique(lab_instrumentosANID$norm_problema) ) ) |> 
     tm::TermDocumentMatrix(control = list(minWordLength = c(1, Inf) ) ) |> 
     as.matrix()
+  
+  
   
 
 # EDA -----------------------------------------------------------------------------------------
