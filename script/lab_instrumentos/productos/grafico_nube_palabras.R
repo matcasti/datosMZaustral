@@ -17,7 +17,7 @@ data <- readRDS(file = "data/lab_instrumentos/clean/data.RDS")
 terminos <- qdap::freq_terms(data$norm_problema, top = 40)
 
 ## Generamos nube de palabras
-pdf(file = "output/lab_instrumentos/productos/nube_palabras.pdf")
+pdf(file = "output/lab_instrumentos/productos/nube_palabras.pdf", width = 8, height = 8)
 set.seed(12345)
 wordcloud(words = terminos$WORD, freq = terminos$FREQ, 
           rot.per = 0, 
