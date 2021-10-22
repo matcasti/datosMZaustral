@@ -4,6 +4,7 @@
 # Preparar espacio ----------------------------------------------------------------------------
 
 library(glue);
+library(highcharter);
 library(data.table);
 .s <- function(x, ...) {
   stopifnot(inherits(x, "data.table"))
@@ -21,6 +22,13 @@ data <- readRDS(file = "data/lab_instrumentos/clean/data.RDS")
 sankey_data <- highcharter::data_to_sankey(data = copy(data)[, .SD, .SDcols = .var])
 
 # Producto ------------------------------------------------------------------------------------
+
+highcharter::data_to_sankey(data = copy(data)[, .SD, .SDcols = .var]) |>
+  highcharter::hchart("sankey")
+
+
+
+# Under construction
 
 names <- readLines(con = "script/lab_instrumentos/productos/sankey/assets/names.txt")
   
