@@ -16,15 +16,16 @@ library(data.table);
 
 data <- readRDS(file = "data/lab_instrumentos/clean/data.RDS")
 
-# Pre-procesamiento ---------------------------------------------------------------------------
-
-.var <- c("laboratorio", "grupo", "norm_problema")
-sankey_data <- highcharter::data_to_sankey(data = copy(data)[, .SD, .SDcols = .var])
-
 # Producto ------------------------------------------------------------------------------------
+.var <- c("laboratorio", "grupo", "normalizacion_causa","problema")
 
 highcharter::data_to_sankey(data = copy(data)[, .SD, .SDcols = .var]) |>
   highcharter::hchart("sankey")
+
+
+
+
+
 
 
 
@@ -32,6 +33,6 @@ highcharter::data_to_sankey(data = copy(data)[, .SD, .SDcols = .var]) |>
 
 names <- readLines(con = "script/lab_instrumentos/productos/sankey/assets/names.txt")
   
-for(i in nrow(sankey_data)) {
+for (i in nrow(sankey_data)) {
   
 }
