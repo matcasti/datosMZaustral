@@ -1,4 +1,4 @@
-## función: Generar grafico de frecuencia de palabras
+## función: Generar grafico de frecuencia de palabras (PROBLEMA)
 ## fecha: 21-oct
 
 # Preparar el espacio de trabajo --------------------------------------------------------------
@@ -18,4 +18,4 @@ terminos <- qdap::freq_terms(data$norm_problema, top = 20)
 ## Graficamos los términos frecuentes
 pdf(file = "output/lab_instrumentos/productos/freq_palabras.pdf", width = 8, height = 6);
 plot(terminos);
-dev.off();
+dev.off()

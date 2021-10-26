@@ -37,34 +37,27 @@ lab_instrumentosANID <- data_temp <- lab_instrumentosANID[, lapply(.SD, tolower)
 saveRDS(object = data_temp, file = "data/lab_instrumentos/raw/tempData.RDS")
 rm(data_temp)
 
-## Eliminamos stopWords PROBLEMAS
-for (i in stopWords) {
-  lab_instrumentosANID[, norm_problema := gsub(pattern = paste0(" ", i," "), replacement = " ", x = norm_problema, fixed = TRUE)]
+## Eliminamos stopWords
+for (i in rep(stopWords, 2)) {
+  lab_instrumentosANID[, `:=`(
+    # Problemas
+    norm_problema = gsub(pattern = paste0(" ", i," "), replacement = " ", x = norm_problema, fixed = TRUE)
+    # Causas
+    , normalizacion_causa = gsub(pattern = paste0(" ", i," "), replacement = " ", x = normalizacion_causa, fixed = TRUE, useBytes = TRUE)
+  )][]
 }
 
-## Eliminamos stopWords CAUSAS
-for (i in stopWords) {
-  lab_instrumentosANID[, normalizacion_causa := gsub(pattern = paste0(" ", i," "), replacement = " ", x = normalizacion_causa, fixed = TRUE)]
+pattrn <- c("el ", "la ", "las ", "los ", "no ", "ya ", "que ", "en ", "porque ")
+
+for (i in rep(pattrn, 2)) {
+  lab_instrumentosANID[, `:=`(
+    norm_problema = gsub(pattern = i, replacement = "", x = norm_problema, fixed = TRUE),
+    normalizacion_causa = gsub(pattern = i, replacement = "", x = normalizacion_causa, fixed = TRUE)
+  )][]
 }
 
-## Stopwords con criterios específicos PROBLEMAS y CAUSAS
-lab_instrumentosANID[, norm_problema := gsub(pattern = "el ", replacement = "", x = norm_problema, fixed = TRUE)
-                     ][, norm_problema := gsub(pattern = "la ", replacement = "", x = norm_problema, fixed = TRUE)
-                       ][, norm_problema := gsub(pattern = "las ", replacement = "", x = norm_problema, fixed = TRUE)
-                         ][, normalizacion_causa := gsub(pattern = "los ", replacement = "", x = normalizacion_causa, fixed = TRUE)
-                           ][, normalizacion_causa := gsub(pattern = "no ", replacement = "", x = normalizacion_causa, fixed = TRUE)
-                             ][, normalizacion_causa := gsub(pattern = "ya ", replacement = "", x = normalizacion_causa, fixed = TRUE)
-                               ][, normalizacion_causa := gsub(pattern = "que ", replacement = "", x = normalizacion_causa, fixed = TRUE)
-                                 ][, normalizacion_causa := gsub(pattern = "la ", replacement = "", x = normalizacion_causa, fixed = TRUE)
-                                   ][, normalizacion_causa := gsub(pattern = "en ", replacement = "", x = normalizacion_causa, fixed = TRUE)
-                                     ][, normalizacion_causa := gsub(pattern = "porque ", replacement = "", x = normalizacion_causa, fixed = TRUE)
-                                       ][, normalizacion_causa := gsub(pattern = "las ", replacement = "", x = normalizacion_causa, fixed = TRUE)]
-
-rm(stopWords, i)
-
+rm(stopWords, pattrn, i)
 
 # Guardamos los datos -------------------------------------------------------------------------
 
 saveRDS(object = lab_instrumentosANID, file = "data/lab_instrumentos/clean/data.RDS")
-
- 

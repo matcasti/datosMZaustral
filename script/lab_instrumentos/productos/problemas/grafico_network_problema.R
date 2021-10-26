@@ -1,4 +1,4 @@
-## función: Generar graficos de redes de términos
+## función: Generar graficos de redes de términos (PROBLEMA)
 ## fecha: 22-oct
 
 # Preparar el espacio de trabajo --------------------------------------------------------------

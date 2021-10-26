@@ -1,4 +1,4 @@
-## función: Generar nube de palabras
+## función: Generar nube de palabras (PROBLEMA)
 ## fecha: 21-oct
 
 # Preparar el espacio de trabajo --------------------------------------------------------------
@@ -20,7 +20,7 @@ stopWords <- readLines(con = "https://raw.githubusercontent.com/Alir3z4/stop-wor
 terminos <- qdap::freq_terms(data$norm_problema, top = 40, stopwords = stopWords)
 
 ## Generamos nube de palabras
-pdf(file = "output/lab_instrumentos/productos/nube_palabras.pdf", width = 8, height = 8)
+pdf(file = "output/lab_instrumentos/productos/nube_palabras_problema.pdf", width = 8, height = 8)
 set.seed(12345)
 wordcloud(words = terminos$WORD, freq = terminos$FREQ, 
           rot.per = 0, 

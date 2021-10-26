@@ -117,5 +117,4 @@ local({
   #   lab_instrumentosANID[norm_problema %like% i, norm_problema_net_k3 := as.numeric(k)]
   # }
 });
-dev.off();
-
+dev.off()
