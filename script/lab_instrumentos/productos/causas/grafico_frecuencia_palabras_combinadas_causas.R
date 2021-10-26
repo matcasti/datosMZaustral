@@ -45,7 +45,7 @@ m <- tm::VCorpus(
 )
 
 ## Gráfico con top 30 combinaciones de dos palabras
-pdf(file = "output/lab_instrumentos/productos/freq_palabras_combinadas_2_CAUSAS.pdf", width = 10, height = 6)
+pdf(file = "output/lab_instrumentos/productos/freq_palabras_combinadas_2_causas.pdf", width = 10, height = 6)
 local({
   ## Matriz de documentos con dos términos
   dtm_twogram <- DocumentTermMatrix(

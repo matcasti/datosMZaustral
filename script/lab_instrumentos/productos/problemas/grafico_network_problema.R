@@ -65,7 +65,7 @@ local({
 ## Detacción de comunidades -------------------------------------------------------------------
 
 ### Structure detection based on edge betweenness ---------------------------------------------
-pdf(file = "output/lab_instrumentos/productos/network_1.pdf", width = 8, height = 8);
+pdf(file = "output/lab_instrumentos/productos/network_1_problemas.pdf", width = 8, height = 8);
 local({
   comm <- igraph::cluster_edge_betweenness(g)
   plot(comm, g, vertex.size = 4)
@@ -83,7 +83,7 @@ local({
 dev.off();
 
 ### Structure detection based on propagating labels -------------------------------------------
-pdf(file = "output/lab_instrumentos/productos/network_2.pdf", width = 8, height = 8);
+pdf(file = "output/lab_instrumentos/productos/network_2_problemas.pdf", width = 8, height = 8);
 local({
   prop <- igraph::cluster_label_prop(g)
   plot(prop, g, vertex.size = 4)
@@ -101,7 +101,7 @@ local({
 dev.off();
 
 ### Structure detection via greedy optimization of modularity ---------------------------------
-pdf(file = "output/lab_instrumentos/productos/network_3.pdf", width = 8, height = 8);
+pdf(file = "output/lab_instrumentos/productos/network_3_problemas.pdf", width = 8, height = 8);
 local({
   set.seed(222)
   greed <- igraph::cluster_fast_greedy(igraph::as.undirected(g))
