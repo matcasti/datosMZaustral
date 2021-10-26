@@ -20,7 +20,7 @@ library(data.table)
 # Importación ---------------------------------------------------------------------------------
 
 ## Importamos base de datos
-lab_instrumentosANID <- readxl::read_excel("data/lab_instrumentos/raw/Lista de problemas LAB 1.xlsx", sheet = "Lista") |> 
+lab_instrumentosANID <- readxl::read_excel("data/lab_instrumentos/raw/Lista de problemas LAB 1.xlsx", sheet = "Lista P-C-E") |> 
   data.table::as.data.table() |> 
   `names<-`(c("laboratorio", "grupo", "problema", "cluster_problema_manual",                                                                      
               "norm_problema", "cluster_causa_manual", "debido_a", 
@@ -47,7 +47,7 @@ for (i in rep(stopWords, 2)) {
   )][]
 }
 
-pattrn <- c("el ", "la ", "las ", "los ", "no ", "ya ", "que ", "en ", "porque ")
+pattrn <- c("el ", "la ", "las ", "los ", " no ", "ya ", "que ", "en ", "porque ")
 
 for (i in rep(pattrn, 2)) {
   lab_instrumentosANID[, `:=`(
