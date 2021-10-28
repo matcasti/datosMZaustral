@@ -36,3 +36,17 @@ lab_instrumentosANID <- gsheet2tbl(url) |>
               "normalizacion_causa", "conector_3", "consecuencias", "region", 
               "indicadores_relevantes_como_evidencia")) |> 
   .s(region == "1")
+
+
+##Conectar con googlesheets para cargar archivos a google
+
+#Instalar paquete
+#install.packages("googlesheets4")
+library("googlesheets4")
+
+httr::reset_config()
+
+#Ingresamos las credenciales de autenticación de la cuenta a conectar
+googlesheets4::gs4_auth()
+
+  
