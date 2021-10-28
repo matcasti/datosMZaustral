@@ -47,6 +47,8 @@ igraph::V(g)$degree <- igraph::degree(g);
 
 # Producto ------------------------------------------------------------------------------------
 
+message("Iniciando graficos de redes de términos - CAUSAS")
+
 ## Histogram of node degree -------------------------------------------------------------------
 local({
   hist(igraph::V(g)$degree,
@@ -118,3 +120,5 @@ local({
   # }
 });
 dev.off()
+
+message("✅Tarea completada")

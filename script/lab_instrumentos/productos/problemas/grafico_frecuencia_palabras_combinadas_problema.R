@@ -38,6 +38,8 @@ threegramTokenizer <- function(x) {
 
 # Producto ------------------------------------------------------------------------------------
 
+message("Iniciando gráfico de frecuencia de palabras combinadas - PROBLEMAS")
+
 ## Creamos un corpus
 m <- tm::VCorpus(
   x = tm::VectorSource(
@@ -98,3 +100,5 @@ local({
           horiz = TRUE, las = 1)
 })
 dev.off()
+
+message("✅Tarea completada")

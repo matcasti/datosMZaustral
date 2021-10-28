@@ -21,6 +21,8 @@ data <- readRDS(file = "data/lab_instrumentos/clean/data.RDS") |>
 
 # Pre-procesamiento ---------------------------------------------------------------------------
 
+message("Iniciando gráfico de redes de términos - PROBLEMAS")
+
 ## Creación de un corpus para posterior análisis
 m <- tm::Corpus(x = tm::VectorSource(x = unique(data$norm_problema) ) ) |> 
   tm::TermDocumentMatrix(control = list(minWordLength = c(1, Inf) ) ) |> 
@@ -146,3 +148,5 @@ dev.off();
 # igraph::E(g)$color <- rgb(.5, .5, 0, egam)
 # igraph::E(g)$width <- egam
 # plot(g, vertex.size = igraph::V(g)$degree * .5)
+
+message("✅Tarea completada")

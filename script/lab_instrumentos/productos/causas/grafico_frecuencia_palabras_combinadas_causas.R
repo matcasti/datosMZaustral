@@ -1,4 +1,4 @@
-## función: Generar grafico de frecuencia de palabras (CAUSAS)
+## función: Generar grafico de frecuencia de palabras combinadas (CAUSAS)
 ## fecha: 26-oct
 
 # Preparar el espacio de trabajo --------------------------------------------------------------
@@ -36,6 +36,8 @@ threegramTokenizer <- function(x) {
 }
 
 # Producto ------------------------------------------------------------------------------------
+
+message("Iniciando gráfico de frecuencia de palabras combinadas - CAUSAS")
 
 # Creamos un corpus
 m <- tm::VCorpus(
@@ -97,3 +99,5 @@ local({
           horiz = TRUE, las = 1)
 })
 dev.off()
+
+message("✅Tarea completada")

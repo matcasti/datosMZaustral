@@ -1,4 +1,4 @@
-## función: Generar grafico de frecuencia de palabras (CAUSAS)
+## función: Generar grafico de frecuencia de palabras (consecuencias)
 ## fecha: 26-oct
 
 # Preparar el espacio de trabajo --------------------------------------------------------------
@@ -37,15 +37,17 @@ threegramTokenizer <- function(x) {
 
 # Producto ------------------------------------------------------------------------------------
 
+message("Iniciando gráfico de frecuencia de palabras combinadas - CONSECUENCIAS")
+
 # Creamos un corpus
 m <- tm::VCorpus(
   x = tm::VectorSource(
-    x = unique(data$normalizacion_causa)
+    x = unique(data$norm_consecuencias)
   )
 )
 
 ## Gráfico con top 30 combinaciones de dos palabras
-pdf(file = "output/lab_instrumentos/productos/freq_palabras_combinadas_2_causas.pdf", width = 10, height = 6)
+pdf(file = "output/lab_instrumentos/productos/freq_palabras_combinadas_2_consecuencias.pdf", width = 10, height = 6)
 local({
   ## Matriz de documentos con dos términos
   dtm_twogram <- DocumentTermMatrix(
@@ -72,7 +74,7 @@ local({
 dev.off()
 
 ## Gráfico con top 30 combinaciones de tres palabras
-pdf(file = "output/lab_instrumentos/productos/freq_palabras_combinadas_3_CAUSAS.pdf", width = 10, height = 6)
+pdf(file = "output/lab_instrumentos/productos/freq_palabras_combinadas_3_consecuencias.pdf", width = 10, height = 6)
 local({
   ## Matriz de documentos con dos términos
   dtm_twogram <- DocumentTermMatrix(
@@ -97,3 +99,5 @@ local({
           horiz = TRUE, las = 1)
 })
 dev.off()
+
+message("✅Tarea completada")

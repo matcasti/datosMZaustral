@@ -19,6 +19,8 @@ stopWords <- readLines(con = "https://raw.githubusercontent.com/Alir3z4/stop-wor
 
 # Producto ------------------------------------------------------------------------------------
 
+message("Iniciando gráfico de nube de palabras - CAUSAS")
+
 ## Generamos los términos frecuentes
 terminos <- qdap::freq_terms(data$normalizacion_causa, top = 40, stopwords = stopWords)
 
@@ -30,3 +32,5 @@ wordcloud(words = terminos$WORD, freq = terminos$FREQ,
           scale = c(5,1), 
           random.order = F)
 dev.off()
+
+message("✅Tarea completada")
