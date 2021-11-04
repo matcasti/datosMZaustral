@@ -15,7 +15,7 @@ data <- readRDS(file = "data/lab_instrumentos/clean/data.RDS")
 message("Iniciando gráfico de frecuencia de palabras - PROBLEMAS")
 
 ## Generamos los términos frecuentes
-terminos <- qdap::freq_terms(data$norm_problema, top = 20)
+terminos <- qdap::freq_terms(data$clean_problema, top = 20)
 
 ## Graficamos los términos frecuentes
 pdf(file = "output/lab_instrumentos/productos/freq_palabras_problemas.pdf", width = 8, height = 6);

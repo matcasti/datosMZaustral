@@ -13,7 +13,7 @@
 # Cargamos modelos generados anteriormente ----------------------------------------------------
 
   ## Con esto convertimos cada problema único a un número                                                           
-  lab_instrumentosANID[, norm_problema_num := as.numeric(as.factor(norm_problema))]
+  lab_instrumentosANID[, clean_problema_num := as.numeric(as.factor(clean_problema))]
   
   ## Funciones auxiliares
   .xuniq <- function(i) {
@@ -31,9 +31,9 @@
   
     hc <- dcast(
       data = lab_instrumentosANID, 
-      formula = norm_problema_num ~ norm_problema_hclust, 
+      formula = clean_problema_num ~ clean_problema_hclust, 
       fun.aggregate = .xuniq,
-      value.var = "norm_problema_num",
+      value.var = "clean_problema_num",
       margins = T
     )
     
@@ -41,27 +41,27 @@
   
     km <- dcast(
       data = lab_instrumentosANID, 
-      formula = norm_problema_num ~ norm_problema_kmeans, 
+      formula = clean_problema_num ~ clean_problema_kmeans, 
       fun.aggregate = .xuniq,
-      value.var = "norm_problema_num"
+      value.var = "clean_problema_num"
     )
   
   ## 3. Density based clustering --------------------------------------------------------------
 
     d <- dcast(
       data = lab_instrumentosANID, 
-      formula = norm_problema_num ~ norm_problema_dbscan, 
+      formula = clean_problema_num ~ clean_problema_dbscan, 
       fun.aggregate = .xuniq,
-      value.var = "norm_problema_num"
+      value.var = "clean_problema_num"
     )
 
   ## 4. K-mediods -----------------------------------------------------------------------------
   
     kmed <- dcast(
       data = lab_instrumentosANID, 
-      formula = norm_problema_num ~ norm_problema_kmed, 
+      formula = clean_problema_num ~ clean_problema_kmed, 
       fun.aggregate = .xuniq,
-      value.var = "norm_problema_num"
+      value.var = "clean_problema_num"
     )
 
   ## Resumen ----------------------------------------------------------------------------------
@@ -87,17 +87,17 @@
   
   temp2 <- merge(
     x = lab_instrumentosANID[region == 1,], 
-    y = data_temp[region == 1, .(norm_problema2 = norm_problema, problema)] |> unique(), 
+    y = data_temp[region == 1, .(clean_problema2 = clean_problema, problema)] |> unique(), 
     all.x = TRUE,
     by = "problema"
   )
   
-  tabla_1 <- temp2[j = .(norm_problema2, norm_problema_num), by = instrumento] |> 
+  tabla_1 <- temp2[j = .(clean_problema2, clean_problema_num), by = instrumento] |> 
     unique() |> 
-    dcast(norm_problema2 + norm_problema_num ~ instrumento, value.var = "norm_problema_num")
+    dcast(clean_problema2 + clean_problema_num ~ instrumento, value.var = "clean_problema_num")
   
   total <- tabla_1[, 3:8][, lapply(.SD, \(i) length(i[!is.na(i)])) |> 
-                            append(x = list(norm_problema2 = "Total", norm_problema_num = NA))]
+                            append(x = list(clean_problema2 = "Total", clean_problema_num = NA))]
   
   tabla_1 <- rbind(tabla_1, total)
 

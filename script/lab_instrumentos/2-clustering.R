@@ -25,12 +25,12 @@
 # Importar datos ------------------------------------------------------------------------------
 
   lab_instrumentosANID <- readRDS(file = "data/lab_instrumentos/clean/data.RDS") |> 
-    .s(j = norm_problema := gsub(pattern = "macrozona-austral", replacement = "", x = norm_problema))
+    .s(j = clean_problema := gsub(pattern = "macrozona-austral", replacement = "", x = clean_problema))
   
 # Preparación del corpus ----------------------------------------------------------------------
 
   ## Creación de un corpus para posterior análisis
-  m <- tm::Corpus(x = tm::VectorSource(x = unique(lab_instrumentosANID$norm_problema) ) ) |> 
+  m <- tm::Corpus(x = tm::VectorSource(x = unique(lab_instrumentosANID$clean_problema) ) ) |> 
     tm::TermDocumentMatrix(control = list(minWordLength = c(1, Inf) ) ) |> 
     as.matrix()
 
@@ -53,7 +53,7 @@
         # Identificando el grupo dentro del dendrograma
         k <- hc_groups[hc_names == i][[1]]
         # Asignar el grupo a una nueva columna
-        lab_instrumentosANID[norm_problema %like% i, norm_problema_hclust := k]
+        lab_instrumentosANID[clean_problema %like% i, clean_problema_hclust := k]
       }
       
       rm(hc_groups, hc_names)
@@ -88,15 +88,15 @@
                              ggtheme = ggplot2::theme_bw())
   
   ## Generamos grupos ----
-  lookup_km <- data.table(norm_problema_kmeans = km$cluster, 
-                          norm_problema = unique(lab_instrumentosANID$norm_problema))
+  lookup_km <- data.table(clean_problema_kmeans = km$cluster, 
+                          clean_problema = unique(lab_instrumentosANID$clean_problema))
   
   ## Asignamos grupos
   lab_instrumentosANID <- merge(
     x = lab_instrumentosANID,
     y = lookup_km,
     all.x = TRUE,
-    by = "norm_problema"
+    by = "clean_problema"
   )
 
   rm(lookup_km)
@@ -113,15 +113,15 @@
   factoextra::fviz_cluster(d, t(m), geom = "point")
   
   ## Generamos grupos ----
-  lookup_km <- data.table(norm_problema_dbscan = d$cluster, 
-                          norm_problema = unique(lab_instrumentosANID$norm_problema))
+  lookup_km <- data.table(clean_problema_dbscan = d$cluster, 
+                          clean_problema = unique(lab_instrumentosANID$clean_problema))
   
   ## Asignamos grupos
   lab_instrumentosANID <- merge(
     x = lab_instrumentosANID,
     y = lookup_km,
     all.x = TRUE,
-    by = "norm_problema"
+    by = "clean_problema"
   )
   
   rm(f, lookup_km)
@@ -140,15 +140,15 @@
   factoextra::fviz_cluster(kmed, data = t(m))
   
   ## Generamos grupos ----
-  lookup_km <- data.table(norm_problema_kmed = kmed$cluster, 
-                          norm_problema = unique(lab_instrumentosANID$norm_problema))
+  lookup_km <- data.table(clean_problema_kmed = kmed$cluster, 
+                          clean_problema = unique(lab_instrumentosANID$clean_problema))
   
   ## Asignamos grupos
   lab_instrumentosANID <- merge(
     x = lab_instrumentosANID,
     y = lookup_km,
     all.x = TRUE,
-    by = "norm_problema"
+    by = "clean_problema"
   )
   
   rm(gap_stat, lookup_km, m)

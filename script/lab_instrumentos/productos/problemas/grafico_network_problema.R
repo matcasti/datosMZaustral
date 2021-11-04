@@ -16,7 +16,7 @@ library(data.table);
 
 data <- readRDS(file = "data/lab_instrumentos/clean/data.RDS") |> 
   # Eliminamos el término macrozona-austral por ser muy influyente en el modelado
-  .s(j = norm_problema := gsub(pattern = "macrozona-austral", replacement = "", x = norm_problema));
+  .s(j = clean_problema := gsub(pattern = "macrozona-austral", replacement = "", x = clean_problema));
 
 
 # Pre-procesamiento ---------------------------------------------------------------------------
@@ -24,7 +24,7 @@ data <- readRDS(file = "data/lab_instrumentos/clean/data.RDS") |>
 message("Iniciando gráfico de redes de términos - PROBLEMAS")
 
 ## Creación de un corpus para posterior análisis
-m <- tm::Corpus(x = tm::VectorSource(x = unique(data$norm_problema) ) ) |> 
+m <- tm::Corpus(x = tm::VectorSource(x = unique(data$clean_problema) ) ) |> 
   tm::TermDocumentMatrix(control = list(minWordLength = c(1, Inf) ) ) |> 
   as.matrix();
 
@@ -79,7 +79,7 @@ local({
   #   # Identificando el grupo dentro del dendrograma
   #   k <- net_k1[net_k1_n == i][[1]]
   #   # Asignar el grupo a una nueva columna
-  #   lab_instrumentosANID[norm_problema %like% i, norm_problema_net_k1 := as.numeric(k)]
+  #   lab_instrumentosANID[clean_problema %like% i, clean_problema_net_k1 := as.numeric(k)]
   # }
 });
 dev.off();
@@ -97,7 +97,7 @@ local({
   #   # Identificando el grupo dentro del dendrograma
   #   k <- net_k2[net_k2_n == i][[1]]
   #   # Asignar el grupo a una nueva columna
-  #   lab_instrumentosANID[norm_problema %like% i, norm_problema_net_k2 := as.numeric(k)]
+  #   lab_instrumentosANID[clean_problema %like% i, clean_problema_net_k2 := as.numeric(k)]
   # }
 });
 dev.off();
@@ -116,7 +116,7 @@ local({
   #   # Identificando el grupo dentro del dendrograma
   #   k <- net_k3[net_k3_n == i][[1]]
   #   # Asignar el grupo a una nueva columna
-  #   lab_instrumentosANID[norm_problema %like% i, norm_problema_net_k3 := as.numeric(k)]
+  #   lab_instrumentosANID[clean_problema %like% i, clean_problema_net_k3 := as.numeric(k)]
   # }
 });
 dev.off();

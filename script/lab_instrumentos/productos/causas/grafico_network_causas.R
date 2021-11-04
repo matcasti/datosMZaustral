@@ -16,13 +16,13 @@ library(data.table);
 
 data <- readRDS(file = "data/lab_instrumentos/clean/data.RDS") |> 
   # Eliminamos el término macrozona-austral por ser muy influyente en el modelado
-  .s(j = normalizacion_causa := gsub(pattern = "macrozona-austral", replacement = "", x = normalizacion_causa));
+  .s(j = clean_causa := gsub(pattern = "macrozona-austral", replacement = "", x = clean_causa));
 
 
 # Pre-procesamiento ---------------------------------------------------------------------------
 
 ## Creación de un corpus para posterior análisis
-m <- tm::Corpus(x = tm::VectorSource(x = unique(data$normalizacion_causa) ) ) |> 
+m <- tm::Corpus(x = tm::VectorSource(x = unique(data$clean_causa) ) ) |> 
   tm::TermDocumentMatrix(control = list(minWordLength = c(1, Inf) ) ) |> 
   as.matrix();
 

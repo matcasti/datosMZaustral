@@ -16,7 +16,7 @@ library(data.table);
 
 data <- readRDS(file = "data/lab_instrumentos/clean/data.RDS") |> 
   # Eliminamos el término macrozona-austral por ser muy influyente en el modelado
-  .s(j = norm_consecuencias := gsub(pattern = "macrozona-austral", replacement = "", x = norm_consecuencias));
+  .s(j = clean_consecuencias := gsub(pattern = "macrozona-austral", replacement = "", x = clean_consecuencias));
 
 
 # Pre-procesamiento ---------------------------------------------------------------------------
@@ -24,7 +24,7 @@ data <- readRDS(file = "data/lab_instrumentos/clean/data.RDS") |>
 message("Iniciando gráfico de graficos de redes - CONSECUENCIAS")
 
 ## Creación de un corpus para posterior análisis
-m <- tm::Corpus(x = tm::VectorSource(x = unique(data$norm_consecuencias) ) ) |> 
+m <- tm::Corpus(x = tm::VectorSource(x = unique(data$clean_consecuencias) ) ) |> 
   tm::TermDocumentMatrix(control = list(minWordLength = c(1, Inf) ) ) |> 
   as.matrix();
 
