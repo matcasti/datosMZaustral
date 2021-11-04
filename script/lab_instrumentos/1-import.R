@@ -24,11 +24,11 @@ url <- 'https://docs.google.com/spreadsheets/d/1ct6zRIDli4AHjk8QsF4CYSwZzzTVGK0n
 # Importación ---------------------------------------------------------------------------------
 
 ## Importamos base de datos
-lab_instrumentosANID <- gsheet::gsheet2tbl(url) |> 
+lab_instrumentosANID <- gsheet::gsheet2tbl(url) |>
   data.table::as.data.table() |>
   `names<-`(c("laboratorio", "grupo", "problema", "cluster_problema_manual",                                                                      
-              "norm_problema", "cluster_causa_manual", "debido_a", 
-              "normalizacion_causa", "conector_3", "consecuencias", "norm_consecuencias", 
+              "clean_problema", "cluster_causa_manual", "debido_a", 
+              "clean_causa", "conector_3", "consecuencias", "clean_consecuencias", 
               "region", "indicadores_relevantes_como_evidencia")) |> 
   .s(region == "1")
 
@@ -48,7 +48,7 @@ stopWords <- readLines(con = "https://raw.githubusercontent.com/Alir3z4/stop-wor
 stopWords <- c(stopWords, "\\.", "\\,")
 
 # Proceso de eliminar stopwords y puntuación de columnas de interés
-for (j in c("norm_problema", "normalizacion_causa", "norm_consecuencias")) {
+for (j in c("clean_problema", "clean_causa", "clean_consecuencias")) {
   
   ## Añadir un espacio antes de cada vector
   lab_instrumentosANID[, c(j) := paste0(" ", get(j))]
