@@ -123,9 +123,11 @@ dev.off();
 
 
 
-
-
-
+hs <- igraph::hub_score(g, weights = NA)$vector
+pdf(file = "output/lab_instrumentos/productos/network_hubs_problemas.pdf", width = 8, height = 8);
+plot(g, vertex.size = hs * 10, main = 'Hubs',
+     vertex.color = rainbow(50))
+dev.off();
 
 
 
@@ -136,11 +138,11 @@ dev.off();
 # as <- igraph::authority_score(g, weights = NA)$vector
 # par(mfrow = c(1,2))
 # plot(g, vertex.size = hs * 10, main = 'Hubs',
-#      vertex.color = rainbow(50))
+#    vertex.color = rainbow(50))
 # plot(g, vertex.size = as * 9, main = 'Authorities',
 #      vertex.color = rainbow(50))
 # par(mfrow = c(1,1))
-# # Highlighting degrees
+# Highlighting degrees
 # igraph::V(g)$label.cex <- 2.2 * igraph::V(g)$degree / max(igraph::V(g)$degree) + 0.3
 # igraph::V(g)$label.color <- rgb(0, 0, .2, .8)
 # igraph::V(g)$frame.color <- NA
