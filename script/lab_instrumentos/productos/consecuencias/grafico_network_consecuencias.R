@@ -64,7 +64,7 @@ local({
   plot(g, vertex.size = 4)
 });
 
-## Detacción de comunidades -------------------------------------------------------------------
+## Detección de comunidades -------------------------------------------------------------------
 
 ### Structure detection based on edge betweenness ---------------------------------------------
 pdf(file = "output/lab_instrumentos/productos/network_1_consecuencia.pdf", width = 8, height = 8);
@@ -99,7 +99,7 @@ dev.off()
 
 
 ### Structure detection via Spinglass ---------------------------------
-pdf(file = "output/lab_instrumentos/productos/network_4_CAUSAS.pdf", width = 8, height = 8);
+pdf(file = "output/lab_instrumentos/productos/network_4_consecuencia.pdf", width = 8, height = 8);
 local({
   set.seed(222)
   SG <- igraph::cluster_spinglass(g)
