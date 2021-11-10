@@ -142,3 +142,4 @@ plot(g, vertex.size = hs * 10, main = 'Hubs',
 dev.off();
 
 message("✅Tarea completada")
+
