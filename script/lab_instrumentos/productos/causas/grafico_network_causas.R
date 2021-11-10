@@ -123,7 +123,7 @@ dev.off()
 
 
 ### Structure detection via Spinglass ---------------------------------
-pdf(file = "output/lab_instrumentos/productos/network_4_CAUSAS.pdf", width = 8, height = 8);
+pdf(file = "output/lab_instrumentos/productos/network_4_causas.pdf", width = 8, height = 8);
 local({
   set.seed(222)
   SG <- igraph::cluster_spinglass(g)
