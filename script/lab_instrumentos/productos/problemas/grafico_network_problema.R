@@ -64,6 +64,13 @@ local({
   plot(g, vertex.size = 4)
 });
 
+plot(g,
+     vertex.color = rainbow(22),
+     vertex.size = V(g)$degree*2,
+     edge.arrow.size = 0.1,
+     layout = layout.fruchterman.reingold.grid)
+
+
 ## Detección de comunidades -------------------------------------------------------------------
 
 ### Structure detection based on edge betweenness ---------------------------------------------
@@ -108,7 +115,7 @@ local({
   set.seed(222)
   greed <- igraph::cluster_fast_greedy(igraph::as.undirected(g))
   plot(greed, igraph::as.undirected(g), vertex.size = 4)
-  net_k3 <- igraph::membership(greed)
+  net_k3 <- igraph::membership(greed) 
   net_k3_n <- names(net_k3)
   
   # ## Asignamos grupos del clustering ----
@@ -121,8 +128,18 @@ local({
 });
 dev.off();
 
+### Structure detection via Spinglass ---------------------------------
+pdf(file = "output/lab_instrumentos/productos/network_4_problemas.pdf", width = 8, height = 8);
+local({
+  set.seed(222)
+  SG <- igraph::cluster_spinglass(g)
+  plot(SG, g, vertex.size = 8)
+  net_k4 <- igraph::membership(SG)
+  net_k4_n <- names(net_k4)
+});
+dev.off()
 
-
+### Análisis de HUBS - Para matrices indirectas (conectadas o parcialmente conectadas) HUBS y Authorities son iguales ----------------------
 hs <- igraph::hub_score(g, weights = NA)$vector
 pdf(file = "output/lab_instrumentos/productos/network_hubs_problemas.pdf", width = 8, height = 8);
 plot(g, vertex.size = hs * 10, main = 'Hubs',

@@ -121,6 +121,20 @@ local({
 });
 dev.off()
 
+
+### Structure detection via Spinglass ---------------------------------
+pdf(file = "output/lab_instrumentos/productos/network_4_CAUSAS.pdf", width = 8, height = 8);
+local({
+  set.seed(222)
+  SG <- igraph::cluster_spinglass(g)
+  plot(SG, g, vertex.size = 8)
+  net_k4 <- igraph::membership(SG)
+  net_k4_n <- names(net_k4)
+});
+dev.off();
+
+
+### Análisis de HUBS - Para matrices indirectas (conectadas o parcialmente conectadas) HUBS y Authorities son iguales ----------------------
 hs <- igraph::hub_score(g, weights = NA)$vector
 pdf(file = "output/lab_instrumentos/productos/network_hubs_causas.pdf", width = 8, height = 8);
 plot(g, vertex.size = hs * 10, main = 'Hubs',
