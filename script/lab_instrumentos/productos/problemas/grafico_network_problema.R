@@ -64,7 +64,7 @@ local({
   plot(g, vertex.size = 4)
 });
 
-## Detacción de comunidades -------------------------------------------------------------------
+## Detección de comunidades -------------------------------------------------------------------
 
 ### Structure detection based on edge betweenness ---------------------------------------------
 pdf(file = "output/lab_instrumentos/productos/network_1_problemas.pdf", width = 8, height = 8);
