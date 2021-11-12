@@ -42,7 +42,7 @@ message("Iniciando gráfico de frecuencia de palabras combinadas - CONSECUENCIAS
 # Creamos un corpus
 m <- tm::VCorpus(
   x = tm::VectorSource(
-    x = unique(data$clean_consecuencias)
+    x = unique(data$clean_consecuencia)
   )
 )
 
@@ -101,3 +101,4 @@ barplot(threegram_freq_consecuencias[1:30],
 dev.off()
 
 message("✅Tarea completada")
+

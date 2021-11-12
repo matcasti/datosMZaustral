@@ -28,7 +28,7 @@ data <- readRDS(file = "data/lab_instrumentos/clean/data.RDS") |>
 message("Iniciando gráfico de redes de términos - PROBLEMAS")
 
 g <- crear_redes_de_palabras(
-  x = data$clean_causa
+  x = data$clean_problema
 )
 
 
@@ -90,6 +90,7 @@ local({
 dev.off();
 
 ### Structure detection via Spinglass ---------------------------------
+
 pdf(file = "output/lab_instrumentos/productos/network_4_problemas.pdf", width = 8, height = 8);
 local({
   set.seed(222)

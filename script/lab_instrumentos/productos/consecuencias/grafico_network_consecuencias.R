@@ -20,13 +20,13 @@ for (i in list.files("script/lab_instrumentos/funciones/")) {
 
 data <- readRDS(file = "data/lab_instrumentos/clean/data.RDS") |> 
   # Eliminamos el término macrozona-austral por ser muy influyente en el modelado
-  .s(j = clean_consecuencias := gsub(pattern = "macrozona-austral", replacement = "", x = clean_consecuencias));
+  .s(j = clean_consecuencia := gsub(pattern = "macrozona-austral", replacement = "", x = clean_consecuencia));
 
 
 # Pre-procesamiento ---------------------------------------------------------------------------
 
 g <- crear_redes_de_palabras(
-  x = data$clean_causa
+  x = data$clean_consecuencia
 )
 
 # Producto ------------------------------------------------------------------------------------
