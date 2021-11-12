@@ -12,6 +12,10 @@ library(data.table);
   eval(temp)
 }
 
+for (i in list.files("script/lab_instrumentos/funciones/")) {
+  source(paste0("script/lab_instrumentos/funciones/",i),echo = TRUE)
+}
+
 # Importar los datos --------------------------------------------------------------------------
 
 data <- readRDS(file = "data/lab_instrumentos/clean/data.RDS") |> 
@@ -21,31 +25,9 @@ data <- readRDS(file = "data/lab_instrumentos/clean/data.RDS") |>
 
 # Pre-procesamiento ---------------------------------------------------------------------------
 
-message("Iniciando gráfico de graficos de redes - CONSECUENCIAS")
-
-## Creación de un corpus para posterior análisis
-m <- tm::Corpus(x = tm::VectorSource(x = unique(data$clean_consecuencias) ) ) |> 
-  tm::TermDocumentMatrix(control = list(minWordLength = c(1, Inf) ) ) |> 
-  as.matrix();
-
-## Obtenemos aquellos términos que aparezcan almenos dos veces entre los problemas únicos
-m2 <- m[rowSums(m) > 1, ];
-
-## Y a aquellos problemas les asignamos el valor de 1 (es decir, se encuentra presente o no)
-m2[m2 > 1] <- 1;
-
-## Calculamos la co-ocurrencia
-termM <- m2 %*% t(m2);
-
-## Creamos los nodos con sus respectivos vertices
-g <- igraph::graph.adjacency(termM, weighted = T, mode = 'undirected') |> 
-  igraph::simplify();
-
-## Le asignamos etiquetas a los nodos para mejor visualización
-igraph::V(g)$label <- igraph::V(g)$name;
-
-## Le asignamos la propiedad degree (número de vertices adjacentes) al grafo
-igraph::V(g)$degree <- igraph::degree(g);
+g <- crear_redes_de_palabras(
+  x = data$clean_causa
+)
 
 # Producto ------------------------------------------------------------------------------------
 

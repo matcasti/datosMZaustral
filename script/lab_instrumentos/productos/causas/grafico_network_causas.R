@@ -20,7 +20,7 @@ for (i in list.files("script/lab_instrumentos/funciones/")) {
 
 data <- readRDS(file = "data/lab_instrumentos/clean/data.RDS") |> 
   # Eliminamos el término macrozona-austral por ser muy influyente en el modelado
-  .s(j = clean_causa := gsub(pattern = "macrozona-austral", replacement = "", x = clean_causa));
+  .s(j = clean_causa := gsub(pattern = "macrozona-austral", replacement = "", x = clean_causa))
 
 
 # Pre-procesamiento ---------------------------------------------------------------------------
@@ -107,15 +107,18 @@ dev.off()
 
 
 ### Structure detection via Spinglass ---------------------------------
-pdf(file = "output/lab_instrumentos/productos/network_4_causas.pdf", width = 8, height = 8);
-local({
-  set.seed(222)
-  SG <- igraph::cluster_spinglass(g)
-  plot(SG, g, vertex.size = 8)
-  net_k4 <- igraph::membership(SG)
-  net_k4_n <- names(net_k4)
-});
-dev.off();
+ 
+### Comentado porque lanza un error, explorar por qué
+
+# pdf(file = "output/lab_instrumentos/productos/network_4_causas.pdf", width = 8, height = 8);
+# local({
+#   set.seed(222)
+#   SG <- igraph::cluster_spinglass(g)
+#   plot(SG, g, vertex.size = 8)
+#   net_k4 <- igraph::membership(SG)
+#   net_k4_n <- names(net_k4)
+# });
+# dev.off();
 
 
 ### Análisis de HUBS - Para matrices indirectas (conectadas o parcialmente conectadas) HUBS y Authorities son iguales ----------------------
