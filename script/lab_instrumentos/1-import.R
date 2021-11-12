@@ -6,64 +6,53 @@
 ## autores: Matías Castillo, Carlos Morales
 ## fecha: viernes 8 octubre 2021
 
-# Cargar paquetes -----------------------------------------------------------------------------
-library(gsheet)
+# Cargamos paquetes ---------------------------------------------------------------------------
+
 library(data.table)
+library(googlesheets4)
 
-# Funciones auxiliares ------------------------------------------------------------------------
-.s <- function(x, ...) {
-  stopifnot(inherits(x, "data.table"))
-  temp <- substitute(x[...])
-  eval(temp)
+# Importamos los datos ------------------------------------------------------------------------
+
+lab_instrumentos <- googlesheets4::read_sheet(
+  ss = "1ct6zRIDli4AHjk8QsF4CYSwZzzTVGK0ncCDBXtXhmqY",
+  sheet = "Lista P-C-E",
+)
+
+stopWords <- readLines("data-raw/stopwords.txt")
+
+# Tratamiento previo --------------------------------------------------------------------------
+
+lab_instrumentos <- data.table::as.data.table(lab_instrumentos)
+
+names(lab_instrumentos) <- c("laboratorio", "grupo", "problema", "cluster_problema_manual",
+                             "clean_problema", "cluster_causa_manual", "causa",
+                             "clean_causa", "consecuencia", "clean_consecuencia",
+                             "region")
+
+# Tratamiento principal -----------------------------------------------------------------------
+
+lab_instrumentos[, names(lab_instrumentos) := lapply(.SD, tolower)]
+
+lab_instrumentos[, names(lab_instrumentos) := lapply(.SD, gsub, pattern = "\\.", replacement = "")]
+
+lab_instrumentos[, names(lab_instrumentos) := lapply(.SD, gsub, pattern = "\\,", replacement = "")]
+
+vars <- c("clean_problema", "clean_causa", "clean_consecuencia")
+
+for (i in stopWords) {
+  i_bound <- paste0("(?<!\\S)\\b", i, "\\b(?!\\S)")
+  lab_instrumentos[, (vars) := lapply(.SD, gsub, pattern = i_bound, replacement = "", perl = T), .SDcols = vars]
 }
 
-# Importación desde google----------------------------------------------------------------------
+lab_instrumentos[, names(lab_instrumentos) := lapply(.SD, gsub, pattern = "\\s+", replacement = " ")]
 
-url <- 'https://docs.google.com/spreadsheets/d/1ct6zRIDli4AHjk8QsF4CYSwZzzTVGK0ncCDBXtXhmqY/edit#gid=34243368'
+lab_instrumentos[, names(lab_instrumentos) := lapply(.SD, trimws)][]
 
-# Importación ---------------------------------------------------------------------------------
+# Tratamiento final (detalles) ----------------------------------------------------------------
 
-## Importamos base de datos
-lab_instrumentosANID <- gsheet::gsheet2tbl(url) |>
-  data.table::as.data.table() |>
-  `names<-`(c("laboratorio", "grupo", "problema", "cluster_problema_manual",                                                                      
-              "clean_problema", "cluster_causa_manual", "debido_a", 
-              "clean_causa", "conector_3", "consecuencias", "clean_consecuencias", 
-              "region", "indicadores_relevantes_como_evidencia")) |> 
-  .s(region == "1")
+## No necesario
 
-## A minuscula
-lab_instrumentosANID <- lab_instrumentosANID[, lapply(.SD, tolower)]
+# Exportamos los datos ------------------------------------------------------------------------
 
-## Archivo local para 
-local({
-  data_temp <- copy(lab_instrumentosANID)
-  saveRDS(object = data_temp, file = "data/lab_instrumentos/raw/tempData.RDS")
-})
-
-# Limpieza de texto ---------------------------------------------------------------------------
-
-# Stop words
-stopWords <- readLines(con = "https://raw.githubusercontent.com/Alir3z4/stop-words/master/spanish.txt")
-stopWords <- c(stopWords, "\\.", "\\,")
-
-# Proceso de eliminar stopwords y puntuación de columnas de interés
-for (j in c("clean_problema", "clean_causa", "clean_consecuencias")) {
-  
-  ## Añadir un espacio antes de cada vector
-  lab_instrumentosANID[, c(j) := paste0(" ", get(j))]
-  
-  ## Removiendo los stopwords
-  for (i in stopWords) {
-    lab_instrumentosANID[, c(j) := gsub(pattern = paste0(" ", i," "), replacement = " ", x = get(j), fixed = TRUE)]
-  }
-  
-  ## Quitar el espacio añadido previamente al comienzo del vector
-  lab_instrumentosANID[, c(j) := gsub(pattern = "^.", replacement = "", x = get(j))]
-}
-
-rm(i, j, stopWords, url)
-
-# Guardamos los datos -------------------------------------------------------------------------
-
-saveRDS(object = lab_instrumentosANID, file = "data/lab_instrumentos/clean/data.RDS")
+data.table::fwrite(lab_instrumentos, file = "data/lab_instrumentos/clean/data.csv")
+saveRDS(object = lab_instrumentos, file = "data/lab_instrumentos/clean/data.RDS")
