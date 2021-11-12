@@ -35,7 +35,7 @@ g <- crear_redes_de_palabras(
 ## Detección de comunidades -------------------------------------------------------------------
 
 ### Structure detection based on edge betweenness ---------------------------------------------
-pdf(file = "output/lab_instrumentos/productos/network_1_problemas.pdf", width = 8, height = 8);
+pdf(file = "output/lab_instrumentos/productos/network_1_problemas.pdf", width = 12, height = 12);
 local({
   comm <- igraph::cluster_edge_betweenness(g)
   plot(comm, g, vertex.size = 4)
@@ -53,7 +53,7 @@ local({
 dev.off();
 
 ### Structure detection based on propagating labels -------------------------------------------
-pdf(file = "output/lab_instrumentos/productos/network_2_problemas.pdf", width = 8, height = 8);
+pdf(file = "output/lab_instrumentos/productos/network_2_problemas.pdf", width = 12, height = 12);
 local({
   prop <- igraph::cluster_label_prop(g)
   plot(prop, g, vertex.size = 4)
@@ -71,7 +71,7 @@ local({
 dev.off();
 
 ### Structure detection via greedy optimization of modularity ---------------------------------
-pdf(file = "output/lab_instrumentos/productos/network_3_problemas.pdf", width = 8, height = 8);
+pdf(file = "output/lab_instrumentos/productos/network_3_problemas.pdf", width = 12, height = 12);
 local({
   set.seed(222)
   greed <- igraph::cluster_fast_greedy(igraph::as.undirected(g))
@@ -91,7 +91,7 @@ dev.off();
 
 ### Structure detection via Spinglass ---------------------------------
 
-pdf(file = "output/lab_instrumentos/productos/network_4_problemas.pdf", width = 8, height = 8);
+pdf(file = "output/lab_instrumentos/productos/network_4_problemas.pdf", width = 12, height = 12);
 local({
   set.seed(222)
   SG <- igraph::cluster_spinglass(g)
@@ -103,31 +103,11 @@ dev.off()
 
 ### Análisis de HUBS - Para matrices indirectas (conectadas o parcialmente conectadas) HUBS y Authorities son iguales ----------------------
 hs <- igraph::hub_score(g, weights = NA)$vector
-pdf(file = "output/lab_instrumentos/productos/network_hubs_problemas.pdf", width = 8, height = 8);
+pdf(file = "output/lab_instrumentos/productos/network_hubs_problemas.pdf", width = 12, height = 12);
 plot(g, vertex.size = hs * 20, main = 'Hubs',
      vertex.color = rainbow(50))
 dev.off();
 
 
-
-# Revisar después
-
-# # Hub and authorities
-# hs <- igraph::hub_score(g, weights = NA)$vector
-# as <- igraph::authority_score(g, weights = NA)$vector
-# par(mfrow = c(1,2))
-# plot(g, vertex.size = hs * 10, main = 'Hubs',
-#    vertex.color = rainbow(50))
-# plot(g, vertex.size = as * 9, main = 'Authorities',
-#      vertex.color = rainbow(50))
-# par(mfrow = c(1,1))
-# Highlighting degrees
-# igraph::V(g)$label.cex <- 2.2 * igraph::V(g)$degree / max(igraph::V(g)$degree) + 0.3
-# igraph::V(g)$label.color <- rgb(0, 0, .2, .8)
-# igraph::V(g)$frame.color <- NA
-# egam <- (log(igraph::E(g)$weight) + .4) / max(log(igraph::E(g)$weight) + .4)
-# igraph::E(g)$color <- rgb(.5, .5, 0, egam)
-# igraph::E(g)$width <- egam
-# plot(g, vertex.size = igraph::V(g)$degree * .5)
 
 message("✅Tarea completada")
