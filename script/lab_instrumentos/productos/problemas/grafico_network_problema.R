@@ -64,11 +64,14 @@ local({
   plot(g, vertex.size = 4)
 });
 
-plot(g,
-     vertex.color = rainbow(22),
-     vertex.size = V(g)$degree*2,
-     edge.arrow.size = 0.1,
-     layout = layout.fruchterman.reingold.grid)
+
+
+plot(
+  g,
+  vertex.size = V(g)$degree*2,
+  edge.arrow.size = 0.1,
+  layout = layout.circle
+)
 
 
 ## Detección de comunidades -------------------------------------------------------------------
@@ -142,7 +145,7 @@ dev.off()
 ### Análisis de HUBS - Para matrices indirectas (conectadas o parcialmente conectadas) HUBS y Authorities son iguales ----------------------
 hs <- igraph::hub_score(g, weights = NA)$vector
 pdf(file = "output/lab_instrumentos/productos/network_hubs_problemas.pdf", width = 8, height = 8);
-plot(g, vertex.size = hs * 10, main = 'Hubs',
+plot(g, vertex.size = hs * 20, main = 'Hubs',
      vertex.color = rainbow(50))
 dev.off();
 
