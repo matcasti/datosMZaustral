@@ -43,11 +43,11 @@ for (i in terminos$WORD) {
 
 
 # Obtenemos frecuencias de palabras
-terminos <- qdap::freq_terms(data$clean_consecuencias, top = 15, stopwords = stopWords)
+terminos <- qdap::freq_terms(data$clean_consecuencia, top = 15, stopwords = stopWords)
 
 db_consecuencia <- NULL
 for (i in terminos$WORD) {
-  l <- data[, list(word = i, freq = as.numeric(like(clean_consecuencias, i))), grupo][, list(weight = sum(freq)), .(grupo, word)]
+  l <- data[, list(word = i, freq = as.numeric(like(clean_consecuencia, i))), grupo][, list(weight = sum(freq)), .(grupo, word)]
   db_consecuencia <- rbind(db_consecuencia, l)
 }
 

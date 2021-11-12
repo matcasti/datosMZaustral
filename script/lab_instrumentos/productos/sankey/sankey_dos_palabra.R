@@ -106,7 +106,7 @@ db_consecuencia <- local({
   # Creamos un corpus
   m <- tm::VCorpus(
     x = tm::VectorSource(
-      x = unique(data[["clean_consecuencias"]])
+      x = unique(data[["clean_consecuencia"]])
     )
   )
   
@@ -127,7 +127,7 @@ db_consecuencia <- local({
   
   db_consecuencia <- NULL
   for (i in terminos$WORD) {
-    l <- data[j = list(word = i, freq = sum(as.numeric(unique(clean_consecuencias) %like% i))), 
+    l <- data[j = list(word = i, freq = sum(as.numeric(unique(clean_consecuencia) %like% i))), 
               by = grupo
     ][j = list(weight = sum(freq)), 
       by = .(grupo, word)]
@@ -158,5 +158,6 @@ for (i in 1:nrow(db)) {
 
 hc <- data_to_sankey(l) |> 
   highcharter::hchart("sankey")
+
 
 htmlwidgets::saveWidget(hc, file = "output/lab_instrumentos/productos/sankey/dos_palabras.html")
