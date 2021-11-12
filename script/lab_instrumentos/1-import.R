@@ -9,16 +9,15 @@
 # Cargamos paquetes ---------------------------------------------------------------------------
 
 library(data.table)
-library(googlesheets4)
+library(gsheet)
 
 # Importamos los datos ------------------------------------------------------------------------
 
-lab_instrumentos <- googlesheets4::read_sheet(
-  ss = "1ct6zRIDli4AHjk8QsF4CYSwZzzTVGK0ncCDBXtXhmqY",
-  sheet = "Lista P-C-E",
+lab_instrumentos <- gsheet::gsheet2tbl(
+  url = "https://docs.google.com/spreadsheets/d/1ct6zRIDli4AHjk8QsF4CYSwZzzTVGK0ncCDBXtXhmqY/edit#gid=34243368"
 )
 
-stopWords <- readLines("data-raw/stopwords.txt")
+stopWords <- readLines("data/stopwords.txt")
 
 # Tratamiento previo --------------------------------------------------------------------------
 
@@ -50,7 +49,7 @@ lab_instrumentos[, names(lab_instrumentos) := lapply(.SD, trimws)][]
 
 # Tratamiento final (detalles) ----------------------------------------------------------------
 
-## No necesario
+rm(stopWords, i, i_bound, vars)
 
 # Exportamos los datos ------------------------------------------------------------------------
 
