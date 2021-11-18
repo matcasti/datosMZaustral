@@ -33,6 +33,7 @@ for (i in terminos$WORD) {
 # Obtenemos frecuencias de palabras
 terminos <- qdap::freq_terms(data$clean_problema, top = 15, stopwords = stopWords)
 
+
 db_problema <- NULL
 for (i in terminos$WORD) {
   l <- data[, list(word = i, freq = as.numeric(like(clean_problema, i))), grupo][, list(weight = sum(freq)), .(grupo, word)]
@@ -56,18 +57,13 @@ for (i in terminos$WORD) {
 
 
 db <- rbind(
-  cbind(db_problema, categoria = "problema"),
-  cbind(db_causa, categoria = "causa"),
-  cbind(db_consecuencia, categoria = "consecuencia")
+  db_problema[, categoria := "problema"],
+  db_causa[, categoria := "causa"],
+  db_consecuencia[, categoria := "consecuencia"]
 )[weight > 0]
 
-l <- NULL
-for (i in 1:nrow(db)) {
-  .copy <- db[i]
-  for (j in 1:.copy$weight) {
-    l <- rbind(l, .copy[,-3])
-  }
-}
+db[, lapply(.SD, rep, weight), .SDcols = -3L]
+
 
 hc <- data_to_sankey(l) |> 
   highcharter::hchart("sankey")

@@ -7,10 +7,6 @@ library(data.table)
 library(tm)
 library(RWeka)
 
-# Importar los datos --------------------------------------------------------------------------
-
-data <- readRDS(file = "data/lab_instrumentos/clean/data.RDS")
-
 # Funciones auxiliares ------------------------------------------------------------------------
 
 ## Funciones para tokenizar grupos de dos palabras

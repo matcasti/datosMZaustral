@@ -3,19 +3,12 @@
 
 # Preparar el espacio de trabajo --------------------------------------------------------------
 
-library(qdap)
-library(data.table)
-
-# Importar los datos --------------------------------------------------------------------------
-
-data <- readRDS(file = "data/lab_instrumentos/clean/data.RDS")
-
 # Producto ------------------------------------------------------------------------------------
 
 message("Iniciando gráfico de frecuencia de palabras - CAUSAS")
 
 ## Generamos los términos frecuentes
-terminos <- qdap::freq_terms(data$clean_causa, top = 30)
+terminos <- labinstrumentos::get_terms(data$clean_causa, n_words = 1)
 
 ## Graficamos los términos frecuentes
 pdf(file = "output/lab_instrumentos/productos/freq_palabras_causas.pdf", width = 8, height = 6);
