@@ -12,8 +12,8 @@ library(data.table)
 
 data <- readRDS(file = "data/lab_instrumentos/clean/data.RDS") |> 
   # Eliminamos el término macrozona-austral por ser muy influyente en el modelado
-  .s(j = clean_causa := gsub(pattern = "macrozona-austral", replacement = "", x = clean_causa)) |> 
-  .s(j = clean_causa := gsub(pattern = "anid", replacement = "", x = clean_causa))
+  .s(j = clean_causa := gsub(pattern = "macrozona-austral", replacement = "", x = clean_causa))
+ # .s(j = clean_causa := gsub(pattern = "anid", replacement = "", x = clean_causa))
 
 ## Importamos también stopwords
 stopWords <- readLines(con = "https://raw.githubusercontent.com/Alir3z4/stop-words/master/spanish.txt")
